@@ -188,6 +188,26 @@ public:
     string get_author() const { return author; }
     Date get_copyright() const { return copyright; }
     bool get_status() const { return status; }
+    void check_in() {
+        if (status == false)
+        {
+            status = true; 
+            return;
+        }
+        else {
+            error("book checked in already");
+        }
+    }
+    void check_out() {
+        if (status == true)
+        {
+            status = false;
+            return;
+        }
+        else {
+            error("book checked out already");
+        }
+    }
 private:
     bool is_valid();
     string ISBN;
