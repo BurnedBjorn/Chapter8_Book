@@ -183,14 +183,18 @@ public:
         if (!isalpha(n[4])) { error(n + ": incorrect ISBN form"); }
     };
 	~book();
-    
+    string get_ISBN() const { return ISBN; }
+    string get_title() const { return title; }
+    string get_author() const { return author; }
+    Date get_copyright() const { return copyright; }
+    bool get_status() const { return status; }
 private:
     bool is_valid();
     string ISBN;
 	string title;
 	string author;
     Date copyright;
-    bool checkin;
+    bool status;
 };
 
 
