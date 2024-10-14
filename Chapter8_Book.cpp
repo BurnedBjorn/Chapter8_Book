@@ -208,6 +208,14 @@ public:
             error("book checked out already");
         }
     }
+    bool operator==(const book& other) const{
+        return get_ISBN() == other.get_ISBN();
+    }
+    bool operator!=(const book& other) const{
+        return get_ISBN() != other.get_ISBN();
+    }
+    
+    
 private:
     bool is_valid();
     string ISBN;
@@ -216,7 +224,9 @@ private:
     Date copyright;
     bool status;
 };
-
+ostream& operator<<(ostream& os, const book& book) {
+    return os << book.get_title() << endl << book.get_author() << endl << book.get_ISBN() << endl;
+}
 
 
 book::~book()
