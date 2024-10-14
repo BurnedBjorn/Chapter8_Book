@@ -316,6 +316,7 @@ public:
         }
     }
     void add_transaction(const transaction& ta);
+    void checkout_book(book book);
 private:
     vector<patron> users;
     vector<book> books;
@@ -372,6 +373,11 @@ void library::add_transaction(const transaction& ta)
     int index = (find(books.begin(), books.end(), ta.book)-books.begin());//i googled how to do it i dont' actira;ly undrtstna pointers
     books[index].check_out();
     transactions.push_back(ta);
+
+}
+
+void library::checkout_book(book book)
+{
 
 }
 
