@@ -196,7 +196,6 @@ public:
 
     genre get_genre() const { return genre; }
 
-
     Date get_copyright() const { return copyright; }
 
     bool get_status() const { return status; }
@@ -234,7 +233,7 @@ public:
     
     
 private:
-    bool is_valid();
+    
     string ISBN;
 	string title;
 	string author;
@@ -251,10 +250,6 @@ book::~book()
 {
 }
 
-bool book::is_valid()
-{
-    return false;
-}
 
 
 int main()
