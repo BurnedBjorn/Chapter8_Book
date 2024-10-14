@@ -171,7 +171,11 @@ ostream& operator<<(ostream& os, Date& Date) {
 class book
 {
 public:
-    book(string t, string a, string n, Date d) :title{ t }, author{ a }, copyright{ d } {
+    enum class genre {
+        fiction, nonfiction, periodical, biography, children
+    };
+
+    book(string t, string a, genre g, string n, Date d) :title{ t }, author{ a }, genre{ g }, copyright{ d } {
         if (n.size() != 4) { error(n + ": not 4 digits, incorrect ISBN form"); }
         for (int i = 0; i < 3; i++)
         {
@@ -182,12 +186,21 @@ public:
         }
         if (!isalpha(n[4])) { error(n + ": incorrect ISBN form"); }
     };
-	~book();
+    ~book();
+
     string get_ISBN() const { return ISBN; }
+
     string get_title() const { return title; }
+
     string get_author() const { return author; }
+
+    genre get_genre() const { return genre; }
+
+
     Date get_copyright() const { return copyright; }
+
     bool get_status() const { return status; }
+
     void check_in() {
         if (status == false)
         {
@@ -198,6 +211,7 @@ public:
             error("book checked in already");
         }
     }
+
     void check_out() {
         if (status == true)
         {
@@ -208,12 +222,15 @@ public:
             error("book checked out already");
         }
     }
+
     bool operator==(const book& other) const{
         return get_ISBN() == other.get_ISBN();
     }
+
     bool operator!=(const book& other) const{
         return get_ISBN() != other.get_ISBN();
     }
+
     
     
 private:
@@ -221,6 +238,7 @@ private:
     string ISBN;
 	string title;
 	string author;
+    genre genre;
     Date copyright;
     bool status;
 };
