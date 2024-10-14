@@ -290,7 +290,7 @@ class library
 public:
     library();
     ~library();
-    struct transaction
+    struct transaction //unfinished
     {
         transaction(book b, patron t, Date d) :book{ b }, user{ t }, date{ d } {};
         book book;
