@@ -300,7 +300,7 @@ public:
     void add_book(book new_book);
     void add_user(patron new_user);
     bool validate_book(const book& b) const {
-        if (search(books.begin(), books.end(), b) == books.end()) {
+        if (find(books.begin(), books.end(), b) == books.end()) {
             return false;
         }
         else {
@@ -308,7 +308,7 @@ public:
         }
     }
     bool validate_user(const patron& p) const {
-        if (search(users.begin(), users.end(), p) == users.end()) {
+        if (find(users.begin(), users.end(), p) == users.end()) {
             return false;
         }
         else {
@@ -368,7 +368,11 @@ void library::add_transaction(const transaction& ta)
     {
         error(ta.user.get_username() + ": unpaid fees");
     }
+    
+    int index = (find(books.begin(), books.end(), ta.book)-books.begin());//i googled how to do it i dont' actira;ly undrtstna pointers
+    books[index].check_out();
     transactions.push_back(ta);
+
 }
 
 
