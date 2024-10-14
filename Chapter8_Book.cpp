@@ -172,7 +172,7 @@ class book
 {
 public:
     enum class genre {
-        fiction, nonfiction, periodical, biography, children
+        fiction, nonfiction, periodical, biography, children, unset
     };
 
     book(string t, string a, genre g, string n, Date d) :title{ t }, author{ a }, genre{ g }, copyright{ d } {
@@ -187,7 +187,7 @@ public:
         if (!isalpha(n[4])) { error(n + ": incorrect ISBN form"); }
     };
     ~book();
-
+    book():title{"default"}, author{"default"}, genre{genre::unset}, ISBN{"000a"}, copyright{}{}
     string get_ISBN() const { return ISBN; }
 
     string get_title() const { return title; }
@@ -198,7 +198,7 @@ public:
 
     Date get_copyright() const { return copyright; }
 
-    bool get_status() const { return status; }
+    bool get_status() const { return status; } // checked in - true. checked out - false
 
     void check_in() {
         if (status == false)
@@ -251,28 +251,131 @@ book::~book()
 class patron
 {
 public:
-    patron();
+    patron(string name, int num) :username{ name }, card_number{ num }, fees{ 0 } {};
+    patron() :username{ "default" } {}
     ~patron();
     void change_username(string new_name) { username = new_name; }
     string get_username() const { return username; }
     int get_card_number() const { return card_number; }
     bool has_fees() const { return fees > 0; }
     void add_fee(double amount) { fees += amount; }
+    double payment(double amount);
     void clear_fees() { fees = 0; }
+    bool operator==(const patron& other) const{
+        return get_card_number() == other.get_card_number();
+    }
 private:
     string username;
     int card_number=0;
     double fees =0;
 
 };
-
-patron::patron()
-{
-}
-
 patron::~patron()
 {
 }
+double patron::payment(double amount)
+{
+    fees -= amount;
+    double change = 0;
+    if (fees<0)
+    {
+        change = fees * -1;
+        fees = 0;
+    }
+    return change;
+}
+
+class library
+{
+public:
+    library();
+    ~library();
+    struct transaction
+    {
+        transaction(book b, patron t, Date d) :book{ b }, user{ t }, date{ d } {};
+        book book;
+        patron user;
+        Date date;
+    };
+    void add_book(book new_book);
+    void add_user(patron new_user);
+    bool validate_book(const book& b) const {
+        if (search(books.begin(), books.end(), b) == books.end()) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+    bool validate_user(const patron& p) const {
+        if (search(users.begin(), users.end(), p) == users.end()) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+    void add_transaction(const transaction& ta);
+private:
+    vector<patron> users;
+    vector<book> books;
+    vector<transaction> transactions;
+};
+
+library::library()
+{
+}
+
+library::~library()
+{
+}
+
+void library::add_book(book new_book)
+{
+    if (validate_book(new_book)) {
+        books.push_back(new_book);
+    }
+    else {
+        error(new_book.get_ISBN() + ": book already in library");
+    }
+}
+
+void library::add_user(patron new_user)
+{
+    if (validate_user(new_user)) {
+        users.push_back(new_user);
+    }
+    else {
+        error(new_user.get_card_number() + ": user alredy exists");
+    }
+}
+
+void library::add_transaction(const transaction& ta)
+{
+    if (!validate_book(ta.book))
+    {
+        error(ta.book.get_ISBN() + ": book doesn't exist");
+    }
+    if (ta.book.get_status())
+    {
+        error(ta.book.get_ISBN() + ": book is not in library");
+    }
+    if (!validate_user(ta.user))
+    {
+        error(ta.user.get_username() + ": user not in database");
+    }
+    if (ta.user.has_fees())
+    {
+        error(ta.user.get_username() + ": unpaid fees");
+    }
+    transactions.push_back(ta);
+}
+
+
+
+
+
+
 
 int main()
 {
