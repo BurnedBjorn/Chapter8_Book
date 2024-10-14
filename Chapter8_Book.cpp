@@ -6,18 +6,18 @@
 enum class Month {
     jan = 1, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec
 };
-int to_int(Month m)
+static int to_int(Month m)
 {
     return static_cast<int>(m);
 }
 
-Month operator++(Month& m) // prefix increment operator
+static Month operator++(Month& m) // prefix increment operator
 {
     m = (m == Month::dec) ? Month::jan : static_cast<Month>(to_int(m) + 1); // "wrap around"
     return m;
 }
 vector<string> month_tbl = { "Not a month", "January", "February", "March", "April","May","June","July","August","September","October","November","December" };
-ostream& operator<<(ostream& os, Month m)
+static ostream& operator<<(ostream& os, Month m)
 {
     return os << month_tbl[to_int(m)];
 }
@@ -27,12 +27,12 @@ public:
     class invalid { };
     Date(int d, Month m, int y);
     Date():d{1},y{2000},m{Month::jan}{}
-    bool is_valid();
+    bool is_valid() const;
     void add_day(int n);
     int day() const { return d; }
     Month month() const { return m; }
     int year() const { return y; }
-    bool IsLeapYear() {
+    bool IsLeapYear() const {
         if (y % 4) {
             return true;
         }
@@ -44,7 +44,7 @@ private:
     int d, y;
     Month m;
 };
-bool Date::is_valid() {
+bool Date::is_valid() const {
 
     if ((d > 31) or (d < 1)) {
         return false;
@@ -162,7 +162,7 @@ void Date::add_day(int n) {
     }
 }
 
-ostream& operator<<(ostream& os, Date& Date) {
+static ostream& operator<<(ostream& os, Date& Date) {
     return os << Date.day() << ", " << Date.month() << ", " << Date.year();
 }
 
@@ -241,16 +241,38 @@ private:
     Date copyright;
     bool status;
 };
-ostream& operator<<(ostream& os, const book& book) {
+static ostream& operator<<(ostream& os, const book& book) {
     return os << book.get_title() << endl << book.get_author() << endl << book.get_ISBN() << endl;
 }
-
-
 book::~book()
 {
 }
 
+class patron
+{
+public:
+    patron();
+    ~patron();
+    void change_username(string new_name) { username = new_name; }
+    string get_username() const { return username; }
+    int get_card_number() const { return card_number; }
+    bool has_fees() const { return fees > 0; }
+    void add_fee(double amount) { fees += amount; }
+    void clear_fees() { fees = 0; }
+private:
+    string username;
+    int card_number=0;
+    double fees =0;
 
+};
+
+patron::patron()
+{
+}
+
+patron::~patron()
+{
+}
 
 int main()
 {
