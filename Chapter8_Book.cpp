@@ -175,7 +175,7 @@ public:
         fiction, nonfiction, periodical, biography, children, unset
     };
 
-    book(string t, string a, genre g, string n, Date d) :title{ t }, author{ a }, genre{ g }, copyright{ d } {
+    book(string t, string a, genre g, string n, Date d) :title{ t }, author{ a }, genre{ g }, copyright{ d }, status{ true } {
         if (n.size() != 4) { error(n + ": not 4 digits, incorrect ISBN form"); }
         for (int i = 0; i < 3; i++)
         {
@@ -187,7 +187,7 @@ public:
         if (!isalpha(n[4])) { error(n + ": incorrect ISBN form"); }
     };
     ~book();
-    book():title{"default"}, author{"default"}, genre{genre::unset}, ISBN{"000a"}, copyright{}{}
+    book() :title{ "default" }, author{ "default" }, genre{ genre::unset }, ISBN{ "000a" }, copyright{}, status{ true } {}
     string get_ISBN() const { return ISBN; }
 
     string get_title() const { return title; }
