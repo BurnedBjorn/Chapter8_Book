@@ -317,6 +317,7 @@ public:
     }
     void add_transaction(const transaction& ta);
     void checkout_book(book book);
+    vector<patron> indebted();
 private:
     vector<patron> users;
     vector<book> books;
@@ -370,8 +371,7 @@ void library::add_transaction(const transaction& ta)
         error(ta.user.get_username() + ": unpaid fees");
     }
     
-    int index = (find(books.begin(), books.end(), ta.book)-books.begin());//i googled how to do it i dont' actira;ly undrtstna pointers
-    books[index].check_out();
+    checkout_book(ta.book);
     transactions.push_back(ta);
 
 }
@@ -379,8 +379,21 @@ void library::add_transaction(const transaction& ta)
 void library::checkout_book(book book)
 {
 
+    int index = (find(books.begin(), books.end(), book) - books.begin());//i googled how to do it i dont' actira;ly undrtstna pointers
+    books[index].check_out();
 }
 
+vector<patron> library::indebted() {
+    vector<patron> output;
+    for (int i = 0; i < users.size(); i++)
+    {
+        if (users[i].has_fees())
+        {
+            output.push_back(users[i]);
+        }
+    }
+    return output;
+}
 
 
 
