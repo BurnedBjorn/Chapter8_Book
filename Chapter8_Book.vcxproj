@@ -131,7 +131,6 @@
     <ClCompile Include="Date.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Date.h" />
     <ClInclude Include="std_lib_facilities.h" />
   </ItemGroup>
   <ItemGroup>
