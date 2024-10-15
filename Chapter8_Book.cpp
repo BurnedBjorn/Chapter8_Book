@@ -120,7 +120,7 @@ void Date::add_day(int n) {
             break;
 
         case Month::feb:
-            if (IsLeapYear) {
+            if (IsLeapYear()) {
                 if (d > 29)
                 {
                     d -= 29;
