@@ -22,11 +22,19 @@ static ostream& operator<<(ostream& os, Month m)
     return os << month_tbl[to_int(m)];
 }
 
+enum class Day {
+    sunday,monday, tuesday, wednesday, thursday, friday, saturday, error
+};
+static int to_int(Day d) {
+    return static_cast<int>(d);
+}
+vector<string> weekday_tbl = { "mon","tue","wed","thu","fri","sat","sun","error"};
 class Date {
 public:
     class invalid { };
+    
     Date(int d, Month m, int y);
-    Date():d{1},y{2000},m{Month::jan}{}
+    Date():d{1},y{2001},m{Month::jan}{}
     bool is_valid() const;
     void add_day(int n);
     int day() const { return d; }
@@ -40,6 +48,8 @@ public:
             return false;
         }
     }
+    int century() const { return floor(year() / 100)+1; }
+    Day weekday();
 private:
     int d, y;
     Month m;
@@ -162,6 +172,50 @@ void Date::add_day(int n) {
     }
 }
 
+Day Date::weekday()
+{
+    int yr = year() % 100;
+    
+    int mth = to_int(month()) - 2;
+    if (mth<1)
+    {
+        mth += 12;
+    }
+    if (to_int(month())<=2)
+    {
+        yr -= 1;
+    }
+    int index = static_cast<int>(floor(day() + floor((2.6 * (mth)) - 0.2)-2*century()+yr+floor(yr/4)+floor(century()/4)));
+    index = index % 7;
+    if ((century()%4)==0)
+    {
+        index -= 1;
+    }
+    cout <<"ce: "<< century() << ", yr: " << yr << ", mth: " << mth << ", index: " << index << endl;
+    
+    while (index<0)
+    {
+        cout << index << endl;
+        index += 7;
+    }
+    
+    
+    if ((index>=0)and(index<7))
+    {
+        cout << index << " day: ";
+        return Day(index);
+    }
+    else
+    {
+        return Day::error;
+    }
+    
+}
+
+
+static ostream& operator<<(ostream& os, const Day& day) {
+    return os << weekday_tbl[to_int(day)];
+}
 static ostream& operator<<(ostream& os, Date& Date) {
     return os << Date.day() << ", " << Date.month() << ", " << Date.year();
 }
@@ -402,6 +456,14 @@ vector<patron> library::indebted() {
 
 int main()
 {
+    for (int i = 1800; i < 2900; i++)
+    {
+        
+        Date test{ i, Month::jan, 2 };
+        cout <<i<<": "<< test.weekday() << endl<<endl<<endl;
+        
+        
+    }
     
 }
 
