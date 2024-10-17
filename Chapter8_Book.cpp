@@ -49,7 +49,7 @@ public:
         }
     }
     int century() const { return floor(year() / 100)+1; }
-    Day weekday();
+    Day weekday() const;
 private:
     int d, y;
     Month m;
@@ -172,7 +172,7 @@ void Date::add_day(int n) {
     }
 }
 
-Day Date::weekday()
+Day Date::weekday() const
 {
     int yr = year() % 100;
     
@@ -191,18 +191,18 @@ Day Date::weekday()
     {
         index -= 1;
     }
-    cout <<"ce: "<< century() << ", yr: " << yr << ", mth: " << mth << ", index: " << index << endl;
+    //cout <<"ce: "<< century() << ", yr: " << yr << ", mth: " << mth << ", index: " << index << endl;
     
     while (index<0)
     {
-        cout << index << endl;
+        //cout << index << endl;
         index += 7;
     }
     
     
     if ((index>=0)and(index<7))
     {
-        cout << index << " day: ";
+        //cout << index << " day: ";
         return Day(index);
     }
     else
@@ -212,6 +212,13 @@ Day Date::weekday()
     
 }
 
+Date next_workday(const Date& dt)
+{
+    Date output = dt;
+    cout<<out
+    output.add_day(1);
+    
+}
 
 static ostream& operator<<(ostream& os, const Day& day) {
     return os << weekday_tbl[to_int(day)];
@@ -456,14 +463,16 @@ vector<patron> library::indebted() {
 
 int main()
 {
-    for (int i = 1800; i < 2900; i++)
+    Date test{ 2024, Month::jan, 1 };
+    for (int i = 1; i < 100; i++)
     {
         
-        Date test{ i, Month::jan, 2 };
-        cout <<i<<": "<< test.weekday() << endl<<endl<<endl;
-        
-        
+        Date next = next_workday(test);
+        cout << "current day: " <<test<<", "<< test.weekday() << ", next work day: " << next << ", " << next.weekday() << endl;
+        test = next;
     }
+    
+    
     
 }
 
