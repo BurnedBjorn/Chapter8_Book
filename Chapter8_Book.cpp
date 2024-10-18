@@ -29,6 +29,26 @@ static int to_int(Day d) {
     return static_cast<int>(d);
 }
 vector<string> weekday_tbl = { "mon","tue","wed","thu","fri","sat","sun","error"};
+
+static bool leapyear(int y) {
+    if (y % 400 == 0)
+    {
+        return true;
+    }
+    if (y % 100 == 0)
+    {
+        return false;
+    }
+    if (y % 4 == 0)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
 class Date {
 public:
     class invalid { };
@@ -41,12 +61,7 @@ public:
     Month month() const { return m; }
     int year() const { return y; }
     bool IsLeapYear() const {
-        if (y % 4) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return leapyear(year());
     }
     int century() const { return floor(year() / 100)+1; }
     Day weekday() const;
@@ -106,7 +121,7 @@ void Date::add_day(int n) {
         return;
     }
     d += n;
-
+    
     while (true) {
         switch (m)
         {
