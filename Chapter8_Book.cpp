@@ -88,10 +88,10 @@ bool Date::is_valid() const {
     {
     case Month::feb:
         if (!IsLeapYear()) {
-            if (d < 28) { return false; }
+            if (d > 28) { return false; }
         }
         else {
-            if (d < 29) { return false; }
+            if (d > 29) { return false; }
         }
         break;
     case Month::apr:
@@ -114,6 +114,7 @@ Date::Date(int yy, Month mm, int dd) :y{ yy }, m{ mm }, d{ dd }
 {
     if (!is_valid())
     {
+        cout << yy << " " << mm << " " << dd << " ";
         error("invalid date");
     }
     
@@ -315,43 +316,23 @@ static Date next_workday(const Date& dt)
 static int week_of_year(const Date& dt)//buggy
 {
     int doy = dt.day_of_year();
-    Day j1wd = Date{ dt.year(),Month::jan, 1 }.weekday();
-    switch (j1wd)
+    Day wd = dt.weekday();
+    doy -= to_int(wd); //get to the monday of the week
+    
+    
+    Day j1wd = Date{ dt.year(),Month::jan, 1 }.weekday();//week day of jan 1
+    int d = 7 - to_int(j1wd); //amount of days until the second monday of the year
+    int dd = (dt.day() - to_int(wd));
+    if (dd<1)
     {
-    case Day::monday:
-        //doy -= 7;
-        break;
-    case Day::tuesday:
-        doy -= 7;
-        break;
-    case Day::wednesday:
-        doy -= 6;
-        break;
-    case Day::thursday:
-        doy -= 5;
-        break;
-    case Day::friday:
-        doy -= 4;
-        break;
-    case Day::saturday:
-        doy -= 3;
-        break;
-    case Day::sunday:
-        doy -= 2;
-        break;
-    case Day::error:
-        break;
-    default:
-        break;
+        dd += 7;
     }
-    if (doy<1)
-    {
-        return 1;
-    }
-    else
-    {
-        return to_int(floor(doy / 7) + 1);
-    }
+    cout << dd;
+    
+    int aaa = Date{ dt.year(),dt.month(),  dd }.day_of_year() - Date{ dt.year(),Month::jan, d + 1 }.day_of_year();
+    cout << Date{ dt.year(),Month::jan, d+1 }.weekday() << ", " << Date{ dt.year(),dt.month(),  dd }.weekday()<<" ";
+    return aaa;
+    
 }
 
 
@@ -589,15 +570,28 @@ vector<patron> library::indebted() {
 
 int main()
 {
-    Date test{ 2023,Month::jan, 1 };
-    for (int i = 0; i < 720; i++)
-    {
-       
-        cout <<test<<", "<< test.day_of_year()<<", "<<test.weekday() << ", week num:" << week_of_year(test) << endl;
-        test.add_day(1);
+    try {
+        Date test{ 2023,Month::jan, 1 };
+        for (int i = 0; i < 720; i++)
+        {
 
+            cout << test << ", " << test.day_of_year() << ", " << test.weekday() << ", week num:" << week_of_year(test) << endl;
+            test.add_day(1);
+
+        }
     }
-    
+    catch (exception& e) {
+        cerr << "exception: " << e.what() << endl;
+        char c;
+        while (cin >> c && c != ';');
+        return 1;
+    }
+    catch (...) {
+        cerr << "exception\n";
+        char c;
+        while (cin >> c && c != ';');
+        return 2;
+    }
     
 }
 
