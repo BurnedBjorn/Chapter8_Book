@@ -199,10 +199,15 @@ Day Date::weekday() const
     }
     //cout <<"ce: "<< century() << ", yr: " << yr << ", mth: " << mth << ", index: " << index << endl;
     index += 1;
-    while (index<0)
+    while (index < 0)
     {
         //cout << index << endl;
         index += 7;
+    }
+    while (index >6)
+    {
+        //cout << index << endl;
+        index -= 7;
     }
     
     
@@ -221,42 +226,16 @@ Day Date::weekday() const
 Date next_workday(const Date& dt)
 {
     Date output = dt;
-    Day wd = output.weekday();
-    cout << wd;
-    output.add_day(1);
     
-    wd = output.weekday();
-    cout << wd;
-    switch (wd)
+    output.add_day(1);
+    if (output.weekday()==Day::saturday)
     {
-    case Day::sunday:
-        cout << " !1! ";
-        break;
-    case Day::monday:
-        cout << " !2! ";
-        break;
-    case Day::tuesday:
-        cout << " !3! ";
-        break;
-    case Day::wednesday:
-        cout << " !4! ";
-        break;
-    case Day::thursday:
-        cout << " !5! ";
-        break;
-    case Day::friday:
-        cout << " !6! ";
-        break;
-    case Day::saturday:
-        cout << " !7! ";
-        break;
-    case Day::error:
-        cout << " !quit coding! ";
-        break;
-    default:
-        break;
+        output.add_day(2);
     }
-    cout << (wd);
+    if (output.weekday()==Day::sunday)
+    {
+        output.add_day(1);
+    }
     return output;
     
 }
@@ -499,10 +478,13 @@ vector<patron> library::indebted() {
 
 int main()
 {
-    for (int i = 1500; i < 2800; i++)
+    Date test{ 2024,Month::jan, 1 };
+    for (int i = 0; i < 20; i++)
     {
-        Date a { i,Month::jan, 1 };
-        cout <<a<<": "<< a.weekday()<<endl;
+       
+        Date next = next_workday(test);
+        cout << test<< ", " <<test.weekday()<< endl;
+        test = next;
     }
     
     
