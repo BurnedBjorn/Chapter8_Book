@@ -10,7 +10,10 @@ static int to_int(Month m)
 {
     return static_cast<int>(m);
 }
-
+static int to_int(double d)
+{
+    return static_cast<int>(d);
+}
 static Month operator++(Month& m) // prefix increment operator
 {
     m = (m == Month::dec) ? Month::jan : static_cast<Month>(to_int(m) + 1); // "wrap around"
@@ -311,7 +314,44 @@ static Date next_workday(const Date& dt)
 
 static int week_of_year(const Date& dt)
 {
-    int mnum = to_int(dt.month());
+    int doy = dt.day_of_year();
+    Day j1wd = Date{ dt.year(),Month::jan, 1 }.weekday();
+    switch (j1wd)
+    {
+    case Day::monday:
+        //doy -= 7;
+        break;
+    case Day::tuesday:
+        doy -= 7;
+        break;
+    case Day::wednesday:
+        doy -= 6;
+        break;
+    case Day::thursday:
+        doy -= 5;
+        break;
+    case Day::friday:
+        doy -= 4;
+        break;
+    case Day::saturday:
+        doy -= 3;
+        break;
+    case Day::sunday:
+        doy -= 2;
+        break;
+    case Day::error:
+        break;
+    default:
+        break;
+    }
+    if (doy<1)
+    {
+        return 1;
+    }
+    else
+    {
+        return to_int(floor(doy / 7) + 1);
+    }
 }
 
 
@@ -549,12 +589,13 @@ vector<patron> library::indebted() {
 
 int main()
 {
-    Date test{ 2024,Month::jan, 1 };
+    Date test{ 2023,Month::jan, 1 };
     for (int i = 0; i < 720; i++)
     {
        
-        cout <<test<<", "<< test.day_of_year() << endl;
+        cout <<test<<", "<< test.day_of_year()<<", "<<test.weekday() << ", week num:" << week_of_year(test) << endl;
         test.add_day(1);
+
     }
     
     
