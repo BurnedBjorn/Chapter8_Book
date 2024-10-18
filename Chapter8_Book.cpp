@@ -330,8 +330,10 @@ static int week_of_year(const Date& dt)//buggy
     cout << dd;
     
     int aaa = Date{ dt.year(),dt.month(),  dd }.day_of_year() - Date{ dt.year(),Month::jan, d + 1 }.day_of_year();
+
+    int aaaa = doy - dd;
     cout << Date{ dt.year(),Month::jan, d+1 }.weekday() << ", " << Date{ dt.year(),dt.month(),  dd }.weekday()<<" ";
-    return aaa;
+    return doy;
     
 }
 
