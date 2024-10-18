@@ -88,7 +88,7 @@ bool Date::is_valid() const {
     {
     case Month::feb:
         if (!IsLeapYear()) {
-            if (d > 28) { return false; }
+            if (d > 28) { return false; }//fixed
         }
         else {
             if (d > 29) { return false; }
