@@ -23,7 +23,7 @@ static ostream& operator<<(ostream& os, Month m)
 }
 
 enum class Day {
-    sunday,monday, tuesday, wednesday, thursday, friday, saturday, error
+    monday, tuesday, wednesday, thursday, friday, saturday, sunday, error
 };
 static int to_int(Day d) {
     return static_cast<int>(d);
@@ -54,6 +54,12 @@ private:
     int d, y;
     Month m;
 };
+static ostream& operator<<(ostream& os, const Day& day) {
+    return os << weekday_tbl[to_int(day)];
+}
+static ostream& operator<<(ostream& os, Date& Date) {
+    return os << Date.day() << ", " << Date.month() << ", " << Date.year();
+}
 bool Date::is_valid() const {
 
     if ((d > 31) or (d < 1)) {
@@ -192,7 +198,7 @@ Day Date::weekday() const
         index -= 1;
     }
     //cout <<"ce: "<< century() << ", yr: " << yr << ", mth: " << mth << ", index: " << index << endl;
-    
+    index += 1;
     while (index<0)
     {
         //cout << index << endl;
@@ -215,17 +221,47 @@ Day Date::weekday() const
 Date next_workday(const Date& dt)
 {
     Date output = dt;
-    cout<<out
+    Day wd = output.weekday();
+    cout << wd;
     output.add_day(1);
+    
+    wd = output.weekday();
+    cout << wd;
+    switch (wd)
+    {
+    case Day::sunday:
+        cout << " !1! ";
+        break;
+    case Day::monday:
+        cout << " !2! ";
+        break;
+    case Day::tuesday:
+        cout << " !3! ";
+        break;
+    case Day::wednesday:
+        cout << " !4! ";
+        break;
+    case Day::thursday:
+        cout << " !5! ";
+        break;
+    case Day::friday:
+        cout << " !6! ";
+        break;
+    case Day::saturday:
+        cout << " !7! ";
+        break;
+    case Day::error:
+        cout << " !quit coding! ";
+        break;
+    default:
+        break;
+    }
+    cout << (wd);
+    return output;
     
 }
 
-static ostream& operator<<(ostream& os, const Day& day) {
-    return os << weekday_tbl[to_int(day)];
-}
-static ostream& operator<<(ostream& os, Date& Date) {
-    return os << Date.day() << ", " << Date.month() << ", " << Date.year();
-}
+
 
 
 
@@ -463,15 +499,11 @@ vector<patron> library::indebted() {
 
 int main()
 {
-    Date test{ 2024, Month::jan, 1 };
-    for (int i = 1; i < 100; i++)
+    for (int i = 1500; i < 2800; i++)
     {
-        
-        Date next = next_workday(test);
-        cout << "current day: " <<test<<", "<< test.weekday() << ", next work day: " << next << ", " << next.weekday() << endl;
-        test = next;
+        Date a { i,Month::jan, 1 };
+        cout <<a<<": "<< a.weekday()<<endl;
     }
-    
     
     
 }
