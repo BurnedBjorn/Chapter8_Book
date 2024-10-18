@@ -50,6 +50,7 @@ public:
     }
     int century() const { return floor(year() / 100)+1; }
     Day weekday() const;
+    int day_of_year() const;
 private:
     int d, y;
     Month m;
@@ -93,7 +94,11 @@ bool Date::is_valid() const {
 }
 Date::Date(int yy, Month mm, int dd) :y{ yy }, m{ mm }, d{ dd }
 {
-    // if (!is_valid()) {throw invalid{};}
+    if (!is_valid())
+    {
+        error("invalid date");
+    }
+    
 }
 void Date::add_day(int n) {
     if (n < 0) {
@@ -223,7 +228,55 @@ Day Date::weekday() const
     
 }
 
-Date next_workday(const Date& dt)
+int Date::day_of_year() const
+{
+    int output = 0;
+    Month m{ Month::jan };
+    while (to_int(m)<to_int(month()))
+    {
+        switch (m)
+        {
+        case Month::jan:
+        case Month::mar:
+        case Month::may:
+        case Month::jul:
+        case Month::aug:
+        case Month::oct:
+            output += 31;
+            break;
+        case Month::apr:
+        case Month::jun:
+        case Month::sep:
+        case Month::nov:
+            output += 30;
+            break;
+
+        case Month::feb:
+            if (IsLeapYear()) {
+                output += 29;
+
+            }
+            else {
+                output += 28;
+
+            }
+            break;
+        case Month::dec:
+
+            output += 31;
+        default:
+
+            break;
+        }
+        ++m;
+    }
+        
+    
+    output += day();
+    return output;
+}
+
+static Date next_workday(const Date& dt)
 {
     Date output = dt;
     
@@ -241,7 +294,10 @@ Date next_workday(const Date& dt)
 }
 
 
-
+static int week_of_year(const Date& dt)
+{
+    int mnum = to_int(dt.month());
+}
 
 
 class book
@@ -479,12 +535,11 @@ vector<patron> library::indebted() {
 int main()
 {
     Date test{ 2024,Month::jan, 1 };
-    for (int i = 0; i < 20; i++)
+    for (int i = 0; i < 720; i++)
     {
        
-        Date next = next_workday(test);
-        cout << test<< ", " <<test.weekday()<< endl;
-        test = next;
+        cout <<test<<", "<< test.day_of_year() << endl;
+        test.add_day(1);
     }
     
     
