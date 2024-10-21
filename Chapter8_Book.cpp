@@ -322,19 +322,8 @@ static int week_of_year(const Date& dt)//buggy
     
     Day j1wd = Date{ dt.year(),Month::jan, 1 }.weekday();//week day of jan 1
     int d = 7 - to_int(j1wd); //amount of days until the second monday of the year
-    int dd = (dt.day() - to_int(wd));
-    if (dd<1)
-    {
-        dd += 7;
-    }
-    cout << dd;
-    
-    int aaa = Date{ dt.year(),dt.month(),  dd }.day_of_year() - Date{ dt.year(),Month::jan, d + 1 }.day_of_year();
 
-    int aaaa = doy - dd;
-    cout << Date{ dt.year(),Month::jan, d+1 }.weekday() << ", " << Date{ dt.year(),dt.month(),  dd }.weekday()<<" ";
-    return doy;
-    
+    return ((doy-d+6)/7)+1;
 }
 
 
