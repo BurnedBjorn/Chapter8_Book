@@ -567,7 +567,7 @@ int main()
         {
 
             cout << test << ", " << test.day_of_year() << ", " << test.weekday() << ", week num:" << week_of_year(test) << endl;
-            test.add_day(1);
+            test.add_day(7);
 
         }
     }

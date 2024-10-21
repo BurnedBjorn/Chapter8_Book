@@ -128,6 +128,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Chapter8_Book.cpp" />
+    <ClCompile Include="Rational.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="std_lib_facilities.h" />
