@@ -3,6 +3,32 @@
 
 #include "std_lib_facilities.h"
 
+
+class Rational
+{
+public:
+    Rational();
+    ~Rational();
+    int get_num() const { return numerator; }
+    int get_den() const { return denominator; }
+    double to_double() { if (denominator != 0) { return numerator / denominator; } else { error("bruh"); } }
+private:
+    int numerator = 0;
+    int denominator = 1;
+};
+
+Rational::Rational()
+{
+}
+
+Rational::~Rational()
+{
+}
+static ostream& operator<<(ostream& os, const Rational& rat) {
+    return os << rat.get_num() << "/" << rat.get_den();
+}
+
+
 enum class Month {
     jan = 1, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec
 };
@@ -562,14 +588,8 @@ vector<patron> library::indebted() {
 int main()
 {
     try {
-        Date test{ 2023,Month::jan, 1 };
-        for (int i = 0; i < 720; i++)
-        {
-
-            cout << test << ", " << test.day_of_year() << ", " << test.weekday() << ", week num:" << week_of_year(test) << endl;
-            test.add_day(7);
-
-        }
+        Rational r;
+        cout << r;
     }
     catch (exception& e) {
         cerr << "exception: " << e.what() << endl;

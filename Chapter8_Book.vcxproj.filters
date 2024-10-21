@@ -18,9 +18,6 @@
     <ClCompile Include="Chapter8_Book.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Rational.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="std_lib_facilities.h">
