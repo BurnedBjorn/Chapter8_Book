@@ -7,22 +7,44 @@
 class Rational
 {
 public:
-    Rational();
+    Rational() :numerator{ 1 }, denominator{ 1 } {};
+    Rational(int n, int d) :numerator{ n }, denominator{ d } { if (d == 0) { error("\nno, you don't want to do division by 0, you're wrong\n"); } };
     ~Rational();
     int get_num() const { return numerator; }
     int get_den() const { return denominator; }
+    void set_num(int n) { numerator = n; }
+    void set_den(int d) {
+        if (d!=0)
+        {
+            denominator = d;
+        }
+        else
+        {
+            error("\nno, you don't want to do division by 0, you're wrong\n");
+        }
+    }
     double to_double() { if (denominator != 0) { return numerator / denominator; } else { error("bruh"); } }
+    Rational operator+(const Rational& other);
 private:
-    int numerator = 0;
+    int numerator = 1;
     int denominator = 1;
 };
 
-Rational::Rational()
-{
-}
-
 Rational::~Rational()
 {
+}
+Rational Rational::operator+(const Rational& other)
+{
+    Rational output;
+    if (get_den()==other.get_den())
+    {
+        return Rational{ get_num() + other.get_num(),get_den() };
+    }
+    else
+    {
+        
+    }
+    return Rational();
 }
 static ostream& operator<<(ostream& os, const Rational& rat) {
     return os << rat.get_num() << "/" << rat.get_den();
