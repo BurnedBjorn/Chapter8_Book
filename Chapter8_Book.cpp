@@ -38,13 +38,75 @@ Rational Rational::operator+(const Rational& other)
     Rational output;
     if (get_den()==other.get_den())
     {
-        return Rational{ get_num() + other.get_num(),get_den() };
+        output = Rational{ get_num() + other.get_num(),get_den() };
     }
     else
     {
+        output.set_den(get_den() * other.get_den());//common denominator
+        output.set_num(get_num() * other.get_den() + other.get_num() * get_den());// calculate numerator
+        
+        //check if the fraction can be simplified
         
     }
-    return Rational();
+    int comden = output.get_den();//common denominator
+    int newnum = output.get_num();
+    if (comden % 5 == 0 and newnum % 5 == 0)
+    {
+        int i = 5;
+        while (comden % i == 0 and newnum % i == 0)
+        {
+            comden /= i;
+            newnum /= i;
+            cout << i << " " << comden << " " << newnum << endl;
+        }
+    }
+    for (int i = 2; i < 11; i++)
+    {
+        while (comden % i == 0 and newnum % i == 0)
+        {
+            comden /= i;
+            newnum /= i;
+            cout << i << endl;
+        }
+    }
+    for (int i = 2; (i < comden) and (i < newnum); i = i * 6 - 1)
+    {
+        while (comden % i == 0 and newnum % i == 0)
+        {
+            comden /= i;
+            newnum /= i;
+            cout << i << endl;
+        }
+    }
+    for (int i = 3; (i < comden) and (i < newnum); i = i * 6 - 1)
+    {
+        while (comden % i == 0 and newnum % i == 0)
+        {
+            comden /= i;
+            newnum /= i;
+            cout << i << endl;
+        }
+    }
+    for (int i = 2; (i < comden) and (i < newnum); i = i * 6 + 1)
+    {
+        while (comden % i == 0 and newnum % i == 0)
+        {
+            comden /= i;
+            newnum /= i;
+            cout << i << endl;
+        }
+    }
+    for (int i = 3; (i < comden) and (i < newnum); i = i * 6 + 1)
+    {
+        while (comden % i == 0 and newnum % i == 0)
+        {
+            comden /= i;
+            newnum /= i;
+            cout << i << endl;
+        }
+    }
+    return Rational{ newnum,comden };
+    
 }
 static ostream& operator<<(ostream& os, const Rational& rat) {
     return os << rat.get_num() << "/" << rat.get_den();
@@ -610,8 +672,18 @@ vector<patron> library::indebted() {
 int main()
 {
     try {
-        Rational r;
-        cout << r;
+        
+        Rational a1;
+        Rational add;
+        for (int i = 1; i < 1000; i++)
+        {
+            add = add + a1;
+            cout << add << endl << endl;
+            add.set_den(i);
+            
+        }
+        
+        //cout << Rational{ 3524,980 } + Rational{ 1,980 };
     }
     catch (exception& e) {
         cerr << "exception: " << e.what() << endl;
