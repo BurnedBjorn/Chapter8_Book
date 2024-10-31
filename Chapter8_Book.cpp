@@ -139,7 +139,23 @@ Rational Rational::simplify()
     return simplify(get_num(),get_den());
 }
 
+class Money
+{
+public:
+    Money();
+    ~Money();
 
+private:
+    long int cents = 0;
+};
+
+Money::Money()
+{
+}
+
+Money::~Money()
+{
+}
 
 static ostream& operator<<(ostream& os, const Rational& rat) {
     return os << rat.get_num() << "/" << rat.get_den();
