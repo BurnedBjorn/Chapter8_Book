@@ -144,7 +144,9 @@ class Money
 public:
     Money();
     ~Money();
-
+    void set_balance(float n) {
+        cents = static_cast<long int>(floor(n * 100 + 0.5));}
+    float output() const {return static_cast<float>(cents) / 100.0; }
 private:
     long int cents = 0;
 };
@@ -157,6 +159,9 @@ Money::~Money()
 {
 }
 
+static ostream& operator<<(ostream& os, const Money& m) {
+    return os << "$" << m.output();
+}
 static ostream& operator<<(ostream& os, const Rational& rat) {
     return os << rat.get_num() << "/" << rat.get_den();
 }
@@ -721,18 +726,9 @@ vector<patron> library::indebted() {
 int main()
 {
     try {
-        /*
-        Rational a1;
-        Rational add;
-        for (int i = 1; i < 1000; i++)
-        {
-            add = add - a1;
-            cout << add << endl << endl;
-            add.set_den(i);
-            
-        }
-        */
-        cout << Rational{ 3,4 } * Rational{ -4,3 };
+        Money m;
+        m.set_balance(12.5);
+        cout << m;
     }
     catch (exception& e) {
         cerr << "exception: " << e.what() << endl;
