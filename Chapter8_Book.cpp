@@ -26,8 +26,12 @@ public:
     double to_double() { if (denominator != 0) { return numerator / denominator; } else { error("bruh"); } }
     Rational operator+(const Rational& other);
     Rational operator-(const Rational& other);
+    Rational operator*(const Rational& other);
+    Rational operator/(const Rational& other);
     Rational simplify(int num, int den);
+    Rational simplify(const Rational& n);
     Rational simplify();
+    
     
 private:
     int numerator = 1;
@@ -61,8 +65,23 @@ Rational Rational::operator-(const Rational& other)
     Rational self{ get_num(),get_den() };// should probably be done some other way
     return (self + negative);
 }
+Rational Rational::operator*(const Rational& other)
+{
+    Rational output{ get_num() * other.get_num(),get_den() * other.get_den() };
+    return simplify(output);
+}
+Rational Rational::operator/(const Rational& other)
+{
+    if (other.get_num()==0)
+    {
+        error("trying to divide by 0");
+    }
+    Rational output{ get_num() * other.get_den(),get_den() * other.get_num() };
+    return simplify(output);
+}
 Rational Rational::simplify(int num, int den)
 {
+    
     for (int i = 2; i < 11; i++)
     {
         while (den % i == 0 and num % i == 0)
@@ -110,6 +129,10 @@ Rational Rational::simplify(int num, int den)
     }
     
     return Rational{ num,den };
+}
+Rational Rational::simplify(const Rational& n)
+{
+    return simplify(n.get_num(),n.get_den());
 }
 Rational Rational::simplify()
 {
@@ -693,7 +716,7 @@ int main()
             
         }
         */
-        cout << Rational{ 3,4 } - Rational{ 5,4 };
+        cout << Rational{ 3,4 } * Rational{ -4,3 };
     }
     catch (exception& e) {
         cerr << "exception: " << e.what() << endl;
