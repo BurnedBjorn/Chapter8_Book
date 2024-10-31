@@ -26,6 +26,9 @@ public:
     double to_double() { if (denominator != 0) { return numerator / denominator; } else { error("bruh"); } }
     Rational operator+(const Rational& other);
     Rational operator-(const Rational& other);
+    Rational simplify(int num, int den);
+    Rational simplify();
+    
 private:
     int numerator = 1;
     int denominator = 1;
@@ -48,55 +51,8 @@ Rational Rational::operator+(const Rational& other)
         
         //check if the fraction can be simplified
         
-    }
-    int comden = output.get_den();//common denominator
-    int newnum = output.get_num();
-    for (int i = 2; i < 11; i++)
-    {
-        while (comden % i == 0 and newnum % i == 0)
-        {
-            comden /= i;
-            newnum /= i;
-            //cout << i << endl;
-        }
-    }
-    for (int i = 2; (i < abs(comden)) and (i < abs(newnum)); i = i * 6 - 1)
-    {
-        while (comden % i == 0 and newnum % i == 0)
-        {
-            comden /= i;
-            newnum /= i;
-            //cout << i << endl;
-        }
-    }
-    for (int i = 3; (i < abs(comden)) and (i < abs(newnum)); i = i * 6 - 1)
-    {
-        while (comden % i == 0 and newnum % i == 0)
-        {
-            comden /= i;
-            newnum /= i;
-           // cout << i << endl;
-        }
-    }
-    for (int i = 2; (i < abs(comden)) and (i < abs(newnum)); i = i * 6 + 1)
-    {
-        while (comden % i == 0 and newnum % i == 0)
-        {
-            comden /= i;
-            newnum /= i;
-            //cout << i << endl;
-        }
-    }
-    for (int i = 3; (i < abs(comden)) and (i < abs(newnum)); i = i * 6 + 1)
-    {
-        while (comden % i == 0 and newnum % i == 0)
-        {
-            comden /= i;
-            newnum /= i;
-            //cout << i << endl;
-        }
-    }
-    return Rational{ newnum,comden };
+    }    
+    return simplify(output.get_num(),output.get_den());
     
 }
 Rational Rational::operator-(const Rational& other)
@@ -105,6 +61,63 @@ Rational Rational::operator-(const Rational& other)
     Rational self{ get_num(),get_den() };// should probably be done some other way
     return (self + negative);
 }
+Rational Rational::simplify(int num, int den)
+{
+    for (int i = 2; i < 11; i++)
+    {
+        while (den % i == 0 and num % i == 0)
+        {
+            den /= i;
+            num /= i;
+            //cout << i << endl;
+        }
+    }
+    for (int i = 2; (i < abs(den)) and (i < abs(num)); i = i * 6 - 1)
+    {
+        while (den % i == 0 and num % i == 0)
+        {
+            den /= i;
+            num /= i;
+            //cout << i << endl;
+        }
+    }
+    for (int i = 3; (i < abs(den)) and (i < abs(num)); i = i * 6 - 1)
+    {
+        while (den % i == 0 and num % i == 0)
+        {
+            den /= i;
+            num /= i;
+            // cout << i << endl;
+        }
+    }
+    for (int i = 2; (i < abs(den)) and (i < abs(num)); i = i * 6 + 1)
+    {
+        while (den % i == 0 and num % i == 0)
+        {
+            den /= i;
+            num /= i;
+            //cout << i << endl;
+        }
+    }
+    for (int i = 3; (i < abs(den)) and (i < abs(num)); i = i * 6 + 1)
+    {
+        while (den % i == 0 and num % i == 0)
+        {
+            den /= i;
+            num /= i;
+            //cout << i << endl;
+        }
+    }
+    
+    return Rational{ num,den };
+}
+Rational Rational::simplify()
+{
+    return simplify(get_num(),get_den());
+}
+
+
+
 static ostream& operator<<(ostream& os, const Rational& rat) {
     return os << rat.get_num() << "/" << rat.get_den();
 }
