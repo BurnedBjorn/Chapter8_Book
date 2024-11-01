@@ -142,23 +142,35 @@ Rational Rational::simplify()
 class Money
 {
 public:
-    Money();
+    Money() :cents{ 0 } {};
+    Money(double n) { cents = input(n); };
     ~Money();
-    void set_balance(float n) {
-        cents = static_cast<long int>(floor(n * 100 + 0.5));}
-    float output() const {return static_cast<float>(cents) / 100.0; }
+    long int input(double n) {
+        return static_cast<long int>(floor(n * 100 + 0.5));
+    }
+    void set(double n) { cents = input(n); }
+    long int get_cents() const { return cents; }
+    double output() const {return static_cast<double>(cents) / 100.0; }
 private:
     long int cents = 0;
 };
 
-Money::Money()
-{
-}
 
 Money::~Money()
 {
 }
-
+istream& operator>>(istream& is, Money& m) {
+    double n;
+    if (is >> n) {
+        m.set(n);
+    }
+    else
+    {
+        is.clear();
+        error("Money: bad input");
+    }
+    return is;
+}
 static ostream& operator<<(ostream& os, const Money& m) {
     return os << "$" << m.output();
 }
@@ -726,8 +738,8 @@ vector<patron> library::indebted() {
 int main()
 {
     try {
-        Money m;
-        m.set_balance(12.5);
+        Money m{12.44};
+        cin >> m;
         cout << m;
     }
     catch (exception& e) {
