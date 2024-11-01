@@ -182,6 +182,10 @@ Money Money::operator-(const Money& other)
 
 Money Money::operator/(const double& other)
 {
+    if (other==0)
+    {
+        error("division by 0");
+    }
     Money output;
     output.set_cents(static_cast<long int>(round(get_cents() / other)));
     return output;
@@ -230,15 +234,6 @@ Money& Money::operator=(double value)
     set(value);
     return *this;
 }
-
-
-
-
-
-
-
-
-
 
 Money::~Money()
 {
@@ -826,6 +821,7 @@ int main()
         
         cin >> m;
         Money a = m;
+        a = a / 0;
         cout << a;
     }
     catch (exception& e) {
@@ -836,8 +832,8 @@ int main()
     }
     catch (...) {
         cerr << "exception\n";
-        char c;
-        while (cin >> c && c != ';');
+        //char c;
+        //while (cin >> c && c != ';');
         return 2;
     }
     
