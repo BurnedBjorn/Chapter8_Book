@@ -149,11 +149,95 @@ public:
         return static_cast<long int>(floor(n * 100 + 0.5));
     }
     void set(double n) { cents = input(n); }
+    void set_cents(long int n) { cents = n; }
     long int get_cents() const { return cents; }
     double output() const {return static_cast<double>(cents) / 100.0; }
+    Money operator+(const Money& other);
+    Money operator-(const Money& other);
+    bool operator!=(const Money& other);
+    bool operator==(const Money& other);
+    Money operator/(const double& other);
+    Money operator*(const double& other);
+    bool operator==(const double& other);
+    bool operator!=(const double& other);
+    bool operator<(const double& other);
+    bool operator>(const double& other);
+    Money& operator=(double value);
 private:
     long int cents = 0;
 };
+Money Money::operator+(const Money& other)
+{
+    Money output;
+    output.set_cents(get_cents() + other.get_cents());
+    return output;
+}
+
+Money Money::operator-(const Money& other)
+{
+    Money output;
+    output.set_cents(get_cents() - other.get_cents());
+    return output;
+}
+
+Money Money::operator/(const double& other)
+{
+    Money output;
+    output.set_cents(static_cast<long int>(round(get_cents() / other)));
+    return output;
+}
+
+Money Money::operator*(const double& other)
+{
+    Money output;
+    output.set_cents(static_cast<long int>(round(get_cents() * other)));
+    return output;
+}
+
+bool Money::operator==(const Money& other)
+{
+    return get_cents()==other.get_cents();
+}
+
+bool Money::operator==(const double& other)
+{
+    return output()==other;
+}
+
+bool Money::operator!=(const double& other)
+{
+    return output() != other;
+}
+
+
+bool Money::operator!=(const Money& other)
+{
+    return get_cents() != other.get_cents();
+}
+
+bool Money::operator<(const double& other)
+{
+    return output() < other;
+}
+
+bool Money::operator>(const double& other)
+{
+    return output() < other;
+}
+
+Money& Money::operator=(double value)
+{
+    set(value);
+    return *this;
+}
+
+
+
+
+
+
+
+
 
 
 Money::~Money()
@@ -739,8 +823,10 @@ int main()
 {
     try {
         Money m{12.44};
+        
         cin >> m;
-        cout << m;
+        Money a = m;
+        cout << a;
     }
     catch (exception& e) {
         cerr << "exception: " << e.what() << endl;
@@ -767,3 +853,4 @@ int main()
 //   4. Use the Error List window to view errors
 //   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
 //   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
+
