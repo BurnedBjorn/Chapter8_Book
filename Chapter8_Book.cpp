@@ -167,14 +167,16 @@ public:
     Money(double n, Currency c) :curr{ c } { cents = input(n); };
     ~Money();
     long int input(double n) {
-        return static_cast<long int>(floor(n * 100 + 0.5))/curr.get_rate();
+        n *= curr.get_rate();
+        return static_cast<long int>(floor(n * 100 + 0.5));
     }
     void set(double n) { cents = input(n); }
     void set_cents(long int n) { cents = n; }
     void set_currency(Currency c) { curr = c; }
     long int get_cents() const { return cents; }
     Currency get_curr() const { return curr; }
-    double output() const {return curr.get_rate()* (static_cast<double>(cents) / 100.0); }
+    double dollar_output() const { return  ((static_cast<double>(cents)) / 100.0); }
+    double output() const {return  (round(static_cast<double>(cents/curr.get_rate())) / 100.0); }
     Money operator+(const Money& other);
     Money operator-(const Money& other);
     bool operator!=(const Money& other);
@@ -844,12 +846,12 @@ vector<patron> library::indebted() {
 int main()
 {
     try {
-        Money m{12.44};
+        Money m{ 12.44, Currency{"GBP", 1.29, '%'} };
         
-        cin >> m;
-        Money a = m;
-        a = a / 0;
-        cout << a;
+        //cin >> m;
+       
+        
+        cout << m<< ", $" << m.dollar_output();
     }
     catch (exception& e) {
         cerr << "exception: " << e.what() << endl;
