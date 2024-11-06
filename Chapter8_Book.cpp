@@ -139,11 +139,31 @@ Rational Rational::simplify()
     return simplify(get_num(),get_den());
 }
 
+
+class Currency
+{
+public:
+    Currency(string n, double er, char s) :name{ n }, exchange_rate{ er }, symbol{ s } {};
+    ~Currency() {};
+    string get_name() const { return name; }
+    double get_rate() const { return exchange_rate; }
+
+private:
+    string name;
+    double exchange_rate = 1;
+    char symbol;
+};
+
+
 class Money
 {
 public:
+    
+
+
     Money() :cents{ 0 } {};
     Money(double n) { cents = input(n); };
+    Money(double n, Currency c) :curr{ c } { cents = input(n); };
     ~Money();
     long int input(double n) {
         return static_cast<long int>(floor(n * 100 + 0.5));
@@ -151,7 +171,7 @@ public:
     void set(double n) { cents = input(n); }
     void set_cents(long int n) { cents = n; }
     long int get_cents() const { return cents; }
-    double output() const {return static_cast<double>(cents) / 100.0; }
+    double output() const {return curr.get_rate()* (static_cast<double>(cents) / 100.0); }
     Money operator+(const Money& other);
     Money operator-(const Money& other);
     bool operator!=(const Money& other);
@@ -163,8 +183,12 @@ public:
     bool operator<(const double& other);
     bool operator>(const double& other);
     Money& operator=(double value);
+
+    vector<Currency> currency_list{ Currency{"dollar", 1, '$'} };
+
 private:
     long int cents = 0;
+    Currency curr{ "USD", 1, '$' };
 };
 Money Money::operator+(const Money& other)
 {
@@ -321,7 +345,7 @@ public:
     bool IsLeapYear() const {
         return leapyear(year());
     }
-    int century() const { return floor(year() / 100)+1; }
+    int century() const { return static_cast<int>(floor(year() / 100)+1); }
     Day weekday() const;
     int day_of_year() const;
 private:
