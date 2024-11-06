@@ -166,7 +166,7 @@ public:
     Money(double n, Currency c) :curr{ c } { cents = input(n); };
     ~Money();
     long int input(double n) {
-        return static_cast<long int>(floor(n * 100 + 0.5));
+        return static_cast<long int>(floor(n * 100 + 0.5))/curr.get_rate();
     }
     void set(double n) { cents = input(n); }
     void set_cents(long int n) { cents = n; }
