@@ -147,6 +147,7 @@ public:
     ~Currency() {};
     string get_name() const { return name; }
     double get_rate() const { return exchange_rate; }
+    char get_symbol() const { return symbol; }
 
 private:
     string name;
@@ -170,7 +171,9 @@ public:
     }
     void set(double n) { cents = input(n); }
     void set_cents(long int n) { cents = n; }
+    void set_currency(Currency c) { curr = c; }
     long int get_cents() const { return cents; }
+    Currency get_curr() const { return curr; }
     double output() const {return curr.get_rate()* (static_cast<double>(cents) / 100.0); }
     Money operator+(const Money& other);
     Money operator-(const Money& other);
@@ -275,7 +278,7 @@ istream& operator>>(istream& is, Money& m) {
     return is;
 }
 static ostream& operator<<(ostream& os, const Money& m) {
-    return os << "$" << m.output();
+    return os << m.get_curr().get_symbol() << m.output();
 }
 static ostream& operator<<(ostream& os, const Rational& rat) {
     return os << rat.get_num() << "/" << rat.get_den();
